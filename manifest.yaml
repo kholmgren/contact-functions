@@ -1,5 +1,5 @@
 name: contact-functions
-location: build/libs/contact-functions-1.0.jar
+location: build/libs/contact-functions-1.0-all.jar
 
 #TODO: env vars must be set at startup of container -- not implemented yet
 environment:
