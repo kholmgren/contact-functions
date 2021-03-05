@@ -10,17 +10,17 @@ import java.net.URI;
 
 public class AuthZClient {
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    public static final String AUTHZ_HOST = System.getenv("AUTHZ_HOST");
+    public static final String AUTHZ_BASE_URL = System.getenv("AUTHZ_BASE_URL");
 
     @SneakyThrows
     public static void create(Acl acl) {
         try {
-            if (AUTHZ_HOST == null || AUTHZ_HOST.isEmpty()) {
-                System.out.printf("Environment variable AUTHZ_HOST is not set. Suppressing call to /acl/create.%n");
+            if (AUTHZ_BASE_URL == null || AUTHZ_BASE_URL.isEmpty()) {
+                System.out.printf("Environment variable AUTHZ_BASE_URL is not set. Suppressing call to /acl/create.%n");
                 return;
             }
 
-            URI uri = new URI("http://" + AUTHZ_HOST + "/acl/create");
+            URI uri = new URI(AUTHZ_BASE_URL + "/acl/create");
             System.out.println(uri);
 
             HttpResponse httpResponse = Request.Post(uri)
@@ -42,14 +42,14 @@ public class AuthZClient {
 
     @SneakyThrows
     public static void delete(Acl acl) {
-        if (AUTHZ_HOST == null || AUTHZ_HOST.isEmpty()) {
-            System.out.printf("Environment variable AUTHZ_HOST is not set. Suppressing call to /acl/delete.%n");
+        if (AUTHZ_BASE_URL == null || AUTHZ_BASE_URL.isEmpty()) {
+            System.out.printf("Environment variable AUTHZ_BASE_URL is not set. Suppressing call to /acl/delete.%n");
             return;
         }
 
-        System.out.printf("TODO: endpoint %s is not implemented yet%n", AUTHZ_HOST + "/acl/delete");
+        System.out.printf("TODO: endpoint %s is not implemented yet%n", AUTHZ_BASE_URL + "/acl/delete");
 
-//        byte[] responseBody = Request.Post(AUTHZ_HOST + "/acl/delete")
+//        byte[] responseBody = Request.Post(AUTHZ_BASE_URL + "/acl/delete")
 //            .addHeader("Authorization", "Bearer acl_admin")
 //            .addHeader("Accept", "application/json")
 //            .connectTimeout(100)
