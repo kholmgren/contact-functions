@@ -11,22 +11,26 @@ public class AuthZClient {
 
     @SneakyThrows
     public static void create(Acl acl) {
-        if (AUTHZ_HOST == null || AUTHZ_HOST.isEmpty()) {
-            System.out.printf("Environment variable AUTHZ_HOST is not set. Suppressing call to /acl/create.%n");
-            return;
+        try {
+            if (AUTHZ_HOST == null || AUTHZ_HOST.isEmpty()) {
+                System.out.printf("Environment variable AUTHZ_HOST is not set. Suppressing call to /acl/create.%n");
+                return;
+            }
+
+            byte[] responseBody = Request.Post(AUTHZ_HOST + "/acl/create")
+                .addHeader("Authorization", "Bearer acl_admin")
+                .addHeader("Accept", "application/json")
+                .connectTimeout(100)
+                .socketTimeout(100)
+                .bodyByteArray(MAPPER.writeValueAsBytes(acl), ContentType.APPLICATION_JSON)
+                .execute()
+                .returnContent().asBytes();
+
+            if (responseBody == null)
+                throw new Exception("AuthZ response body is null");
+        } catch (Exception e) {
+            System.err.println(e.getMessage() + ": " + e);
         }
-
-        byte[] responseBody = Request.Post(AUTHZ_HOST + "/acl/create")
-            .addHeader("Authorization", "Bearer acl_admin")
-            .addHeader("Accept", "application/json")
-            .connectTimeout(100)
-            .socketTimeout(100)
-            .bodyByteArray(MAPPER.writeValueAsBytes(acl), ContentType.APPLICATION_JSON)
-            .execute()
-            .returnContent().asBytes();
-
-        if (responseBody == null)
-            throw new Exception("AuthZ response body is null");
     }
 
     @SneakyThrows
