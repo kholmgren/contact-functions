@@ -23,12 +23,15 @@ public class AuthZClient {
             URI uri = new URI(AUTHZ_BASE_URL + "/acl/create");
             System.out.println(uri);
 
+            String postBody = MAPPER.writeValueAsString(acl);
+            System.out.println(postBody);
+
             HttpResponse httpResponse = Request.Post(uri)
                 .addHeader("Authorization", "Bearer acl_admin")
                 .addHeader("Accept", "application/json")
-                .connectTimeout(100)
-                .socketTimeout(100)
-                .bodyByteArray(MAPPER.writeValueAsBytes(acl), ContentType.APPLICATION_JSON)
+                .connectTimeout(1000)
+                .socketTimeout(5000)
+                .bodyString(postBody, ContentType.APPLICATION_JSON)
                 .execute()
                 .returnResponse();
 
