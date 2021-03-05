@@ -2,6 +2,7 @@ package contacts.functions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 
@@ -17,19 +18,20 @@ public class AuthZClient {
                 return;
             }
 
-            byte[] responseBody = Request.Post(AUTHZ_HOST + "/acl/create")
+            HttpResponse httpResponse = Request.Post(AUTHZ_HOST + "/acl/create")
                 .addHeader("Authorization", "Bearer acl_admin")
                 .addHeader("Accept", "application/json")
                 .connectTimeout(100)
                 .socketTimeout(100)
                 .bodyByteArray(MAPPER.writeValueAsBytes(acl), ContentType.APPLICATION_JSON)
                 .execute()
-                .returnContent().asBytes();
+                .returnResponse();
 
-            if (responseBody == null)
-                throw new Exception("AuthZ response body is null");
+            System.out.println(httpResponse.getStatusLine());
+
         } catch (Exception e) {
-            System.err.println(e.getMessage() + ": " + e);
+            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
         }
     }
 
