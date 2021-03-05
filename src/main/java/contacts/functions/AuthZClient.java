@@ -6,6 +6,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 
+import java.net.URI;
+
 public class AuthZClient {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     public static final String AUTHZ_HOST = System.getenv("AUTHZ_HOST");
@@ -18,7 +20,10 @@ public class AuthZClient {
                 return;
             }
 
-            HttpResponse httpResponse = Request.Post(AUTHZ_HOST + "/acl/create")
+            URI uri = new URI("http://" + AUTHZ_HOST + "/acl/create");
+            System.out.println(uri);
+
+            HttpResponse httpResponse = Request.Post(uri)
                 .addHeader("Authorization", "Bearer acl_admin")
                 .addHeader("Accept", "application/json")
                 .connectTimeout(100)
