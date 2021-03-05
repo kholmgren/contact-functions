@@ -4,19 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Slf4j
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Acl implements Cloneable, Serializable {
-
     private final static Pattern aclExprPattern = Pattern.compile("(\\S+):(\\S+)#(\\S+)@(\\S+)");
     private final static Pattern usersetPattern = Pattern.compile("(\\S+):(\\S+)#(\\S+)");
 
@@ -59,7 +56,7 @@ public class Acl implements Cloneable, Serializable {
     private static Acl parseAcl(String aclExpr) {
         Matcher m = aclExprPattern.matcher(aclExpr);
         if (!m.find()) {
-            log.warn("Can't parse ACL: {}}", aclExpr);
+            System.out.printf("Can't parse ACL: %s%n", aclExpr);
             return null;
         }
 
@@ -72,8 +69,8 @@ public class Acl implements Cloneable, Serializable {
         String usersetObject = null;
         String usersetRelation = null;
 
-        log.debug(String.format("acl: %s", aclExpr));
-        log.debug(String.format("acl -> namespace: %s , object: %s, relation: %s, user: %s", namespace, object, relation, user));
+        System.out.printf("acl: %s%n", aclExpr);
+        System.out.printf("acl -> namespace: %s , object: %s, relation: %s, user: %s%n", namespace, object, relation, user);
 
         m = usersetPattern.matcher(m.group(4));
         if (m.find()) {
@@ -81,7 +78,7 @@ public class Acl implements Cloneable, Serializable {
             usersetObject = m.group(2);
             usersetRelation = m.group(3);
 
-            log.debug(String.format("userset -> namespace: %s, object: %s, relation: %s", usersetNamespace, usersetObject, usersetRelation));
+            System.out.printf("userset -> namespace: %s, object: %s, relation: %s%n", usersetNamespace, usersetObject, usersetRelation);
         }
 
         return Acl.builder()

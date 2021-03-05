@@ -2,11 +2,9 @@ package contacts.functions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 
-@Slf4j
 public class AuthZClient {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     public static final String AUTHZ_HOST = System.getenv("AUTHZ_HOST");
@@ -14,7 +12,7 @@ public class AuthZClient {
     @SneakyThrows
     public static void create(Acl acl) {
         if (AUTHZ_HOST == null || AUTHZ_HOST.isEmpty()) {
-            log.warn("Environment variable AUTHZ_HOST is not set. Suppressing call to /acl/create.");
+            System.out.printf("Environment variable AUTHZ_HOST is not set. Suppressing call to /acl/create.%n");
             return;
         }
 
@@ -34,11 +32,11 @@ public class AuthZClient {
     @SneakyThrows
     public static void delete(Acl acl) {
         if (AUTHZ_HOST == null || AUTHZ_HOST.isEmpty()) {
-            log.warn("Environment variable AUTHZ_HOST is not set. Suppressing call to /acl/delete.");
+            System.out.printf("Environment variable AUTHZ_HOST is not set. Suppressing call to /acl/delete.%n");
             return;
         }
 
-        log.info("TODO: endpoint {} is not implemented yet", AUTHZ_HOST + "/acl/delete");
+        System.out.printf("TODO: endpoint %s is not implemented yet%n", AUTHZ_HOST + "/acl/delete");
 
 //        byte[] responseBody = Request.Post(AUTHZ_HOST + "/acl/delete")
 //            .addHeader("Authorization", "Bearer acl_admin")
