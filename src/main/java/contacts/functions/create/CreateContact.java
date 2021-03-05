@@ -13,13 +13,11 @@ public class CreateContact implements Function<CreateContactArgs, CreateContactR
 
         String id = UUID.randomUUID().toString();
 
-        String tuple = String.format("%s:%s#%s@%s",
-            "contact",
-            id,
-            "owner",
-            "group:contactusers#member");
+        AuthZClient.create(Acl.create(
+            String.format("contact:%s#%s@%s", id, "owner", "group:contactusers#admin")));
 
-        AuthZClient.create(Acl.create(tuple));
+        AuthZClient.create(Acl.create(
+            String.format("contact:%s#%s@%s", id, "editor", "group:contactusers#member")));
 
         return new CreateContactResult(id);
     }
